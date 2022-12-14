@@ -1,52 +1,79 @@
 #include "monty.h"
 
 /**
- * create_node_stack - create a node stack.
- * @stack: A pointer to top and bottom stack.
- * Return: EXIT SUCCESS
+ * _pstr - mod top of stack y second top stack
+ * @stack: pointer to lists for monty stack
+ * @line_number: number of line opcode occurs on
  */
-int create_node_stack(stack_t **stack)
+void _pstr(stack_t **stack, unsigned int line_number)
 {
-	stack_t *p;
+	stack_t *tmp = *stack;
+	int c = 0;
 
-	p = malloc(sizeof(stack_t));
-	if (p == NULL)
-		stderr_malloc();
-	p->n = STACK;
-	p->prev = NULL;
-	p->next = NULL;
+	(void)line_number;
 
-	*stack = p;
 
-	return (EXIT_SUCCESS);
-}
-/**
- * free_node_stack - Frees a stack_t stack.
- * @stack: A pointer to top and bottom stack.
- */
-void free_node_stack(stack_t **stack)
-{
-	stack_t *temp_node = *stack;
-
-	while (*stack)
+	while (tmp)
 	{
-		temp_node = (*stack)->next;
-		free(*stack);
-		*stack = temp_node;
+		c = tmp->n;
+		if (c == 0 || _isalpha(c) == 0)
+			break;
+		putchar(c);
+		tmp = tmp->next;
 	}
+	putchar('\n');
 }
-/**
- * check_opcode - checks if STACK or QUEUE.
- * @stack: A pointer to top and bottom stack.
- * Return: The value of Stack or Queue
- */
-int check_opcode(stack_t *stack)
-{
-	int ret_val = 2;
 
-	if (stack->n == STACK)
-		return (STACK);
-	else if (stack->n == QUEUE)
-		return (QUEUE);
-	return (ret_val);
+/**
+ * _rotl - mod top of stack y second top stack
+ * @stack: pointer to lists for monty stack
+ * @line_number: number of line opcode occurs on
+ */
+void _rotl(stack_t **stack, unsigned int line_number)
+{
+	stack_t *runner = *stack;
+
+
+	int aux1 = 0;
+
+	if (!line_number || !stack || !*stack || !(*stack)->next)
+		return;
+
+	aux1 = runner->n;
+
+	while (runner->next)
+	{
+		runner = runner->next;
+		runner->prev->n = runner->n;
+	}
+
+	runner->n = aux1;
+}
+
+/**
+ * _rotr - mod top of stack y second top stacks
+ * @stack: pointer to lists for monty stack
+ * @line_number: number of line opcode occurs on
+ */
+void _rotr(stack_t **stack, unsigned int line_number)
+{
+	stack_t *runner = *stack;
+
+	int aux1 = 0;
+
+	if (!line_number || !stack || !*stack || !(*stack)->next)
+		return;
+
+	while (runner->next)
+		runner = runner->next;
+
+	aux1 = runner->n;
+
+	while (runner->prev)
+	{
+		runner = runner->prev;
+		runner->next->n = runner->n;
+	}
+
+	runner->n = aux1;
 }
